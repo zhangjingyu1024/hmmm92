@@ -37,12 +37,12 @@
         </el-col>
         <el-col :span="6">
           标签：
-          <el-select v-model="searchForm.questionType" style="width:140px;">
+          <el-select v-model="searchForm.tags" style="width:140px;">
             <el-option
-              v-for="item in questionTypeList"
+              v-for="item in tagsList"
               :key="item.value"
-              :value="item.value"
               :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-col>
@@ -69,8 +69,7 @@
       <el-row>
         <el-col :span="6" :gutter="20">
           方向：
-          <el-select placeholder="请选择" v-model="searchForm.direction" style="width:135px">
-      </el-select>
+          <el-select placeholder="请选择" v-model="searchForm.direction" style="width:135px"></el-select>
         </el-col>
         <el-col :span="6">
           录入人：
@@ -90,6 +89,8 @@
 </template>
 
 <script>
+// 获取标签信息方法导入
+import { simple as tagsSimple } from '@/api/hmmm/tags'
 // 把api数据接口相关方法导入进来
 import { simple } from '@/api/hmmm/subjects' // 学科
 // as给导入的成员设置别名
@@ -101,6 +102,7 @@ export default {
   name: 'QuestionsList',
   data() {
     return {
+      tagsList: [], // 标签
       // 定义各个搜索表单域的数据展示成员
       subjectIDList: [],
       difficultyList, // 简易成员赋值(difficultyList:difficultyList)
@@ -126,8 +128,16 @@ export default {
   created() {
     // 学科
     this.getSubjectIDList()
+    // 标签
+    this.getTagsList()
   },
   methods: {
+    // 获得 标签 列表数据
+    async getTagsList() {
+      var result = await tagsSimple() // promise对象 变为dt 了
+      this.tagsList = result.data
+      // console.log(result)
+    },
     // 获得学科下拉列表数据
     async getSubjectIDList() {
       var rst = await simple()
