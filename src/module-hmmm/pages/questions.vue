@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
+      <el-card>
       <el-row>
         <el-col :span="6" :gutter="20">
           学科：
@@ -107,11 +108,31 @@
           <el-button type="primary" size="mini">搜索</el-button>
         </el-col>
       </el-row>
+      <el-table :data="questionList" style="width:100%">
+        <el-table-column label="序号" type="index"></el-table-column>
+        <el-table-column label="试题编号" prop="number"></el-table-column>
+        <el-table-column label="学科" prop="subject"></el-table-column>
+        <el-table-column label="题型" :formatter="questionTypeFMT"  prop="questionType"></el-table-column>
+        <el-table-column label="题干" prop="question"></el-table-column>
+        <el-table-column label="录入时间" prop="addDate" width="170">
+            <span slot-scope="stData">{{stData.row.addDate | parseTimeByString('{y}-{m}-{d}')}}</span>
+        </el-table-column>
+        <el-table-column label="难度" prop="difficulty"  :formatter="difficultyFMT"></el-table-column>
+        <el-table-column label="录入人" prop="creator"></el-table-column>
+        <el-table-column label="操作" width="200">
+            <a href="#">预览</a>
+            <a href="#">修改</a>
+            <a href="#">删除</a>
+            <a href="#">加入精选</a>
+        </el-table-column>
+      </el-table>
+      </el-card>
     </div>
   </div>
 </template>
 
 <script>
+import { list } from '@/api/hmmm/questions' // 基础题库相关api导入
 import { provinces, citys } from '@/api/hmmm/citys' // 获取 省份/城市 信息方法导入
 import { simple as directorysSimple } from '@/api/hmmm/directorys' // 获取二级目录信息方法导入
 import { simple as usersSimple } from '@/api/base/users' // 获取录入人信息方法导入
@@ -128,6 +149,7 @@ export default {
   name: 'QuestionsList',
   data() {
     return {
+      questionList: [], // 基础题库列表信息
       cityList: [], // 区县信息
       catalogIDList: [], // 二级目录
       creatorIDList: [], // 录入人
@@ -155,6 +177,8 @@ export default {
     }
   },
   created() {
+    // 获得基础题库列表信息
+    this.getQuestionList()
     // 获得 二级目录 信息
     this.getCatalogIDList()
     // 获得录入人信息
@@ -165,6 +189,25 @@ export default {
     this.getTagsList()
   },
   methods: {
+    // 对"难度"进行二次修饰
+    difficultyFMT(row, column, cellValue, index) {
+      return this.difficultyList[cellValue - 1].label
+    },
+    // 对"题型"数据进行二次修饰
+    // row: 代表每条记录信息(stData.row.xx)
+    // column:代表列的信息(一般不使用)
+    // cellValue: 当前正在处理的目标列的内容(与row.questionType一致)
+    questionTypeFMT(row, column, cellValue, index) {
+      // console.log(index)
+      // return 返回的信息会去覆盖当前的column列的内容
+    return this.questionTypeList[cellValue - 1].label
+    },
+    // 获得基础题库列表信息
+    async getQuestionList() {
+      var result = await list()
+      // 把获得好的题库列表信息富裕给questionList
+      this.questionList = result.data.items
+    },
     // 获得 城市 信息
     // 这个pname形参就代表被选中的省份信息
     getCitys(pname) {
@@ -206,5 +249,9 @@ export default {
 }
 .el-row {
   margin-bottom: 10px;
+}
+
+.el-table {
+ margin-top: 20px;
 }
 </style>
