@@ -84,7 +84,14 @@
         </el-col>
         <el-col :span="6">
           二级目录：
-          <el-select placeholder="请选择" v-model="searchForm.catalogID" style="width:135px"></el-select>
+          <el-select placeholder="请选择" v-model="searchForm.catalogID" style="width:135px">
+            <el-option
+              v-for="item in catalogIDList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-col>
         <el-col :span="6">
           <el-button size="mini">清除</el-button>
@@ -96,6 +103,7 @@
 </template>
 
 <script>
+import { simple as directorysSimple } from '@/api/hmmm/directorys' // 获取二级目录信息方法导入
 import { simple as usersSimple } from '@/api/base/users' // 获取录入人信息方法导入
 // 获取标签信息方法导入
 import { simple as tagsSimple } from '@/api/hmmm/tags'
@@ -110,6 +118,7 @@ export default {
   name: 'QuestionsList',
   data() {
     return {
+      catalogIDList: [], // 二级目录
       creatorIDList: [], // 录入人
       tagsList: [], // 标签
       // 定义各个搜索表单域的数据展示成员
@@ -135,6 +144,8 @@ export default {
     }
   },
   created() {
+    // 获得 二级目录 信息
+    this.getCatalogIDList()
     // 获得录入人信息
     this.getCreatorIDList()
     // 学科
@@ -143,6 +154,12 @@ export default {
     this.getTagsList()
   },
   methods: {
+    // 获得二级目录下拉列表数据
+    async getCatalogIDList() {
+      var result = await directorysSimple()
+      // console.log(result)
+      this.catalogIDList = result.data
+    },
     // 获得录入人下拉列表数据
     async getCreatorIDList() {
       var result = await usersSimple()
