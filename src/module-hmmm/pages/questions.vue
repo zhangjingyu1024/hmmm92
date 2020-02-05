@@ -73,7 +73,14 @@
         </el-col>
         <el-col :span="6">
           录入人：
-          <el-select placeholder="请选择" v-model="searchForm.creatorID" style="width:135px"></el-select>
+          <el-select placeholder="请选择" v-model="searchForm.creatorID" style="width:135px">
+            <el-option
+              v-for="item in creatorIDList"
+              :key="item.id"
+              :label="item.username"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-col>
         <el-col :span="6">
           二级目录：
@@ -89,6 +96,7 @@
 </template>
 
 <script>
+import { simple as usersSimple } from '@/api/base/users' // 获取录入人信息方法导入
 // 获取标签信息方法导入
 import { simple as tagsSimple } from '@/api/hmmm/tags'
 // 把api数据接口相关方法导入进来
@@ -102,6 +110,7 @@ export default {
   name: 'QuestionsList',
   data() {
     return {
+      creatorIDList: [], // 录入人
       tagsList: [], // 标签
       // 定义各个搜索表单域的数据展示成员
       subjectIDList: [],
@@ -126,12 +135,19 @@ export default {
     }
   },
   created() {
+    // 获得录入人信息
+    this.getCreatorIDList()
     // 学科
     this.getSubjectIDList()
     // 标签
     this.getTagsList()
   },
   methods: {
+    // 获得录入人下拉列表数据
+    async getCreatorIDList() {
+      var result = await usersSimple()
+      this.creatorIDList = result.data
+    },
     // 获得 标签 列表数据
     async getTagsList() {
       var result = await tagsSimple() // promise对象 变为dt 了
