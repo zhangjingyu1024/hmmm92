@@ -50,8 +50,17 @@
       <el-row>
         <el-col :span="6" :gutter="20">
           城市：
-          <el-select v-model="searchForm.province" placeholder="选城市" style="width:90px"></el-select>
-          <el-select v-model="searchForm.city" placeholder="选地区" style="width:90px"></el-select>
+          <el-select
+            v-model="searchForm.province"
+            placeholder="选城市"
+            @change="getCitys(searchForm.province)"
+            style="width:90px"
+          >
+            <el-option v-for="item in provinces()" :key="item" :label="item" :value="item"></el-option>
+          </el-select>
+          <el-select v-model="searchForm.city" placeholder="选地区" style="width:90px">
+            <el-option v-for="item in cityList" :key="item" :label="item" :value="item"></el-option>
+          </el-select>
         </el-col>
         <el-col :span="6">
           关键字：
@@ -103,6 +112,7 @@
 </template>
 
 <script>
+import { provinces, citys } from '@/api/hmmm/citys' // 获取 省份/城市 信息方法导入
 import { simple as directorysSimple } from '@/api/hmmm/directorys' // 获取二级目录信息方法导入
 import { simple as usersSimple } from '@/api/base/users' // 获取录入人信息方法导入
 // 获取标签信息方法导入
@@ -118,6 +128,7 @@ export default {
   name: 'QuestionsList',
   data() {
     return {
+      cityList: [], // 区县信息
       catalogIDList: [], // 二级目录
       creatorIDList: [], // 录入人
       tagsList: [], // 标签
@@ -154,6 +165,14 @@ export default {
     this.getTagsList()
   },
   methods: {
+    // 获得 城市 信息
+    // 这个pname形参就代表被选中的省份信息
+    getCitys(pname) {
+      this.searchForm.city = '' // 清除之前选取好的城市
+      this.cityList = citys(pname)
+    },
+    // 获得 省份 信息，简易成员赋值
+    provinces, // provinces:provinces
     // 获得二级目录下拉列表数据
     async getCatalogIDList() {
       var result = await directorysSimple()
