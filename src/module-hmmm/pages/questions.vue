@@ -176,6 +176,17 @@ export default {
       }
     }
   },
+  // 制作watch监听器，对searchForm表单对象进行深度监听，发现搜索表单数据由变化，就重新获得试题列表信息
+  watch: {
+    // 搜索表单深度监听
+     searchForm: {
+    handler: function(newV, oldV) {
+    // 任何条件改变都重新获得数据
+    this.getQuestionList()
+    },
+    deep: true
+     }
+  },
   created() {
     // 获得基础题库列表信息
     this.getQuestionList()
@@ -204,7 +215,7 @@ export default {
     },
     // 获得基础题库列表信息
     async getQuestionList() {
-      var result = await list()
+      var result = await list(this.searchForm)
       // 把获得好的题库列表信息富裕给questionList
       this.questionList = result.data.items
     },
