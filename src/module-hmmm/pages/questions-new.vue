@@ -61,6 +61,15 @@
               >{{item.label}}</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="难度：">
+            <el-radio-group v-model="addForm.difficulty">
+              <el-radio
+                v-for="item in difficultyList"
+                :key="item.value"
+                :label=" item.value+'' "
+              >{{item.label}}</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -68,7 +77,11 @@
 </template>
 
 <script>
-import { questionType as questionTypeList } from '@/api/hmmm/constants.js'
+import {
+  difficulty as difficultyList,
+  questionType as questionTypeList
+} from '@/api/hmmm/constants.js'
+
 import { list as companysList } from '@/api/hmmm/companys' // 企业
 import { simple as subjectsSimple } from '@/api/hmmm/subjects' // 学科
 import { simple as directorysSimple } from '@/api/hmmm/directorys' // 二级目录
@@ -79,6 +92,7 @@ export default {
   name: 'QuestionsNew',
   data() {
     return {
+      difficultyList, // 难度 简易成员赋值
       questionTypeList, // 题型 (简易成员赋值)
       enterpriseIDList: [], // 企业
       subjectIDList: [], // 学科
@@ -87,6 +101,7 @@ export default {
       // 添加试题 表单数据对象
       addForm: {
         // 如下表单字段名称来自yapi数据接口
+        difficulty: '1', // 默认 难度 第一个项目被选中(要求是字符串)
         questionType: '1', // 默认“单选” 题型 项目被选中(要求是字符串)
         subjectID: '', // 学科
         catalogID: '', // 二级目录
