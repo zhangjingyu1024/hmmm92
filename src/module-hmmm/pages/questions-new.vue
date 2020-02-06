@@ -70,6 +70,21 @@
               >{{item.label}}</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="题干：">
+            <el-input type="textarea" v-model="addForm.question"></el-input>
+          </el-form-item>
+          <el-form-item label="答案：">
+            <el-input type="textarea" v-model="addForm.answer"></el-input>
+          </el-form-item>
+          <el-form-item label="备注：">
+            <el-input type="textarea" v-model="addForm.remarks"></el-input>
+          </el-form-item>
+          <el-form-item label="标签：">
+            <el-input type="text" v-model="addForm.tags"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary">提交</el-button>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -101,6 +116,11 @@ export default {
       // 添加试题 表单数据对象
       addForm: {
         // 如下表单字段名称来自yapi数据接口
+        question: '', // 题干
+        answer: '', // 答案
+        remarks: '', // 备注
+        tags: '', // 标签
+        videoURL: 'http://www.xxx.com', // 解析视频
         difficulty: '1', // 默认 难度 第一个项目被选中(要求是字符串)
         questionType: '1', // 默认“单选” 题型 项目被选中(要求是字符串)
         subjectID: '', // 学科
