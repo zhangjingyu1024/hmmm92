@@ -3,6 +3,12 @@
     <div class="app-container">
       <el-card>
         <el-row>
+          <el-col>
+            <el-button type="primary" size="mini" @click="$router.push('/questions/new')">新增试题</el-button>
+            <el-button type="danger" size="mini">批量导入</el-button>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="6" :gutter="20">
             学科：
             <el-select v-model="searchForm.subjectID">
@@ -182,13 +188,13 @@ export default {
   // 制作watch监听器，对searchForm表单对象进行深度监听，发现搜索表单数据由变化，就重新获得试题列表信息
   watch: {
     // 搜索表单深度监听
-     searchForm: {
-    handler: function(newV, oldV) {
-    // 任何条件改变都重新获得数据
-    this.getQuestionList()
-    },
-    deep: true
-     }
+    searchForm: {
+      handler: function(newV, oldV) {
+        // 任何条件改变都重新获得数据
+        this.getQuestionList()
+      },
+      deep: true
+    }
   },
   created() {
     // 获得基础题库列表信息
@@ -206,21 +212,21 @@ export default {
     // 删除试题
     // question : 被删除试题的整条记录对象
     del(question) {
-   // 确认框
-  this.$confirm('确认要删除该记录么?', '删除', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  })
-    .then(async () => {
-    // 调用remove的api方法，实现删除
-    let result = await remove(question)
-    // console.log(result)
-    this.$message.success('删除成功')
- // 数据刷新(旧的就不显示了)
-    this.getQuestionList()
-  })
-    .catch(() => {})
+      // 确认框
+      this.$confirm('确认要删除该记录么?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // 调用remove的api方法，实现删除
+          let result = await remove(question)
+          // console.log(result)
+          this.$message.success('删除成功')
+          // 数据刷新(旧的就不显示了)
+          this.getQuestionList()
+        })
+        .catch(() => {})
     },
     // 对"难度"进行二次修饰
     difficultyFMT(row, column, cellValue, index) {
@@ -233,7 +239,7 @@ export default {
     questionTypeFMT(row, column, cellValue, index) {
       // console.log(index)
       // return 返回的信息会去覆盖当前的column列的内容
-    return this.questionTypeList[cellValue - 1].label
+      return this.questionTypeList[cellValue - 1].label
     },
     // 获得基础题库列表信息
     async getQuestionList() {
