@@ -2,136 +2,139 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card>
-      <el-row>
-        <el-col :span="6" :gutter="20">
-          学科：
-          <el-select v-model="searchForm.subjectID">
-            <el-option
-              v-for="item in subjectIDList"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          难度：
-          <el-select v-model="searchForm.difficulty">
-            <el-option
-              v-for="item in difficultyList"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          试题类型：
-          <el-select v-model="searchForm.questionType" style="width:140px;">
-            <el-option
-              v-for="item in questionTypeList"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          标签：
-          <el-select v-model="searchForm.tags" style="width:140px;">
-            <el-option
-              v-for="item in tagsList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6" :gutter="20">
-          城市：
-          <el-select
-            v-model="searchForm.province"
-            placeholder="选城市"
-            @change="getCitys(searchForm.province)"
-            style="width:90px"
-          >
-            <el-option v-for="item in provinces()" :key="item" :label="item" :value="item"></el-option>
-          </el-select>
-          <el-select v-model="searchForm.city" placeholder="选地区" style="width:90px">
-            <el-option v-for="item in cityList" :key="item" :label="item" :value="item"></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          关键字：
-          <el-input type="text" v-model="searchForm.keyword" class="wd"></el-input>
-        </el-col>
-        <el-col :span="6">
-          试题备注：
-          <el-input type="text" v-model="searchForm.remarks" class="wd"></el-input>
-        </el-col>
-        <el-col :span="6">
-          企业简称：
-          <el-input type="text" v-model="searchForm.shortName" class="wd"></el-input>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6" :gutter="20">
-          方向：
-          <el-select placeholder="请选择" v-model="searchForm.direction" style="width:135px"></el-select>
-        </el-col>
-        <el-col :span="6">
-          录入人：
-          <el-select placeholder="请选择" v-model="searchForm.creatorID" style="width:135px">
-            <el-option
-              v-for="item in creatorIDList"
-              :key="item.id"
-              :label="item.username"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          二级目录：
-          <el-select placeholder="请选择" v-model="searchForm.catalogID" style="width:135px">
-            <el-option
-              v-for="item in catalogIDList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="6">
-          <el-button size="mini">清除</el-button>
-          <el-button type="primary" size="mini">搜索</el-button>
-        </el-col>
-      </el-row>
-      <el-table :data="questionList" style="width:100%">
-        <el-table-column label="序号" type="index"></el-table-column>
-        <el-table-column label="试题编号" prop="number"></el-table-column>
-        <el-table-column label="学科" prop="subject"></el-table-column>
-        <el-table-column label="题型" :formatter="questionTypeFMT"  prop="questionType"></el-table-column>
-        <el-table-column label="题干" prop="question"></el-table-column>
-        <el-table-column label="录入时间" prop="addDate" width="170">
+        <el-row>
+          <el-col :span="6" :gutter="20">
+            学科：
+            <el-select v-model="searchForm.subjectID">
+              <el-option
+                v-for="item in subjectIDList"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            难度：
+            <el-select v-model="searchForm.difficulty">
+              <el-option
+                v-for="item in difficultyList"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            试题类型：
+            <el-select v-model="searchForm.questionType" style="width:140px;">
+              <el-option
+                v-for="item in questionTypeList"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            标签：
+            <el-select v-model="searchForm.tags" style="width:140px;">
+              <el-option
+                v-for="item in tagsList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6" :gutter="20">
+            城市：
+            <el-select
+              v-model="searchForm.province"
+              placeholder="选城市"
+              @change="getCitys(searchForm.province)"
+              style="width:90px"
+            >
+              <el-option v-for="item in provinces()" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
+            <el-select v-model="searchForm.city" placeholder="选地区" style="width:90px">
+              <el-option v-for="item in cityList" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            关键字：
+            <el-input type="text" v-model="searchForm.keyword" class="wd"></el-input>
+          </el-col>
+          <el-col :span="6">
+            试题备注：
+            <el-input type="text" v-model="searchForm.remarks" class="wd"></el-input>
+          </el-col>
+          <el-col :span="6">
+            企业简称：
+            <el-input type="text" v-model="searchForm.shortName" class="wd"></el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6" :gutter="20">
+            方向：
+            <el-select placeholder="请选择" v-model="searchForm.direction" style="width:135px"></el-select>
+          </el-col>
+          <el-col :span="6">
+            录入人：
+            <el-select placeholder="请选择" v-model="searchForm.creatorID" style="width:135px">
+              <el-option
+                v-for="item in creatorIDList"
+                :key="item.id"
+                :label="item.username"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            二级目录：
+            <el-select placeholder="请选择" v-model="searchForm.catalogID" style="width:135px">
+              <el-option
+                v-for="item in catalogIDList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <el-button size="mini">清除</el-button>
+            <el-button type="primary" size="mini">搜索</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="questionList" style="width:100%">
+          <el-table-column label="序号" type="index"></el-table-column>
+          <el-table-column label="试题编号" prop="number"></el-table-column>
+          <el-table-column label="学科" prop="subject"></el-table-column>
+          <el-table-column label="题型" :formatter="questionTypeFMT" prop="questionType"></el-table-column>
+          <el-table-column label="题干" prop="question"></el-table-column>
+          <el-table-column label="录入时间" prop="addDate" width="170">
             <span slot-scope="stData">{{stData.row.addDate | parseTimeByString('{y}-{m}-{d}')}}</span>
-        </el-table-column>
-        <el-table-column label="难度" prop="difficulty"  :formatter="difficultyFMT"></el-table-column>
-        <el-table-column label="录入人" prop="creator"></el-table-column>
-        <el-table-column label="操作" width="200">
-            <a href="#">预览</a>
-            <a href="#">修改</a>
-            <a href="#">删除</a>
-            <a href="#">加入精选</a>
-        </el-table-column>
-      </el-table>
+          </el-table-column>
+          <el-table-column label="难度" prop="difficulty" :formatter="difficultyFMT"></el-table-column>
+          <el-table-column label="录入人" prop="creator"></el-table-column>
+          <el-table-column label="操作" width="200">
+            <template slot-scope="stData">
+              <a href="#">预览</a>
+              <a href="#">修改</a>
+              <a href="#" @click.prevent="del(stData.row)">删除</a>
+              <a href="#">加入精选</a>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-card>
     </div>
   </div>
 </template>
 
 <script>
+import { remove } from '@/api/hmmm/questions.js' // 删除基础试题api
 import { list } from '@/api/hmmm/questions' // 基础题库相关api导入
 import { provinces, citys } from '@/api/hmmm/citys' // 获取 省份/城市 信息方法导入
 import { simple as directorysSimple } from '@/api/hmmm/directorys' // 获取二级目录信息方法导入
@@ -200,6 +203,25 @@ export default {
     this.getTagsList()
   },
   methods: {
+    // 删除试题
+    // question : 被删除试题的整条记录对象
+    del(question) {
+   // 确认框
+  this.$confirm('确认要删除该记录么?', '删除', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async () => {
+    // 调用remove的api方法，实现删除
+    let result = await remove(question)
+    // console.log(result)
+    this.$message.success('删除成功')
+ // 数据刷新(旧的就不显示了)
+    this.getQuestionList()
+  })
+    .catch(() => {})
+    },
     // 对"难度"进行二次修饰
     difficultyFMT(row, column, cellValue, index) {
       return this.difficultyList[cellValue - 1].label
@@ -263,6 +285,6 @@ export default {
 }
 
 .el-table {
- margin-top: 20px;
+  margin-top: 20px;
 }
 </style>
