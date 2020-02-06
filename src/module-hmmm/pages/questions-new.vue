@@ -26,12 +26,12 @@
           </el-form-item>
           <el-form-item label="企业：">
             <el-select v-model="addForm.enterpriseID">
-                  <el-option
-               v-for="item in enterpriseIDList"
-               :key="item.id"
-               :label="item.shortName"
-               :value="item.id"
-            ></el-option>
+              <el-option
+                v-for="item in enterpriseIDList"
+                :key="item.id"
+                :label="item.shortName"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="城市：">
@@ -52,6 +52,15 @@
               <el-option v-for="item in directionList" :key="item" :value="item" :label="item"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="题型：">
+            <el-radio-group v-model="addForm.questionType">
+              <el-radio
+                v-for="item in questionTypeList"
+                :key="item.value"
+                :label=" item.value+'' "
+              >{{item.label}}</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -59,6 +68,7 @@
 </template>
 
 <script>
+import { questionType as questionTypeList } from '@/api/hmmm/constants.js'
 import { list as companysList } from '@/api/hmmm/companys' // 企业
 import { simple as subjectsSimple } from '@/api/hmmm/subjects' // 学科
 import { simple as directorysSimple } from '@/api/hmmm/directorys' // 二级目录
@@ -69,6 +79,7 @@ export default {
   name: 'QuestionsNew',
   data() {
     return {
+      questionTypeList, // 题型 (简易成员赋值)
       enterpriseIDList: [], // 企业
       subjectIDList: [], // 学科
       catalogIDList: [], // 二级目录
@@ -76,6 +87,7 @@ export default {
       // 添加试题 表单数据对象
       addForm: {
         // 如下表单字段名称来自yapi数据接口
+        questionType: '1', // 默认“单选” 题型 项目被选中(要求是字符串)
         subjectID: '', // 学科
         catalogID: '', // 二级目录
         enterpriseID: '', // 企业
