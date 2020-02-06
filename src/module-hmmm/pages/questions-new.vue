@@ -85,6 +85,27 @@
           <el-form-item>
             <el-button type="primary">提交</el-button>
           </el-form-item>
+          <el-form-item label="选项：">
+            <el-radio v-model="singleSelect" :label="0">
+              A:
+              <el-input type="text" v-model="addForm.options[0]['title']"></el-input>
+            </el-radio>
+            <br />
+            <el-radio v-model="singleSelect" :label="1">
+              B:
+              <el-input type="text" v-model="addForm.options[1]['title']"></el-input>
+            </el-radio>
+            <br />
+            <el-radio v-model="singleSelect" :label="2">
+              C:
+              <el-input type="text" v-model="addForm.options[2]['title']"></el-input>
+            </el-radio>
+            <br />
+            <el-radio v-model="singleSelect" :label="3">
+              D:
+              <el-input type="text" v-model="addForm.options[3]['title']"></el-input>
+            </el-radio>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -107,6 +128,8 @@ export default {
   name: 'QuestionsNew',
   data() {
     return {
+      // 感知被被选中的项目的值，是中间成员，需要通过watch转变为isRight
+      singleSelect: '',
       difficultyList, // 难度 简易成员赋值
       questionTypeList, // 题型 (简易成员赋值)
       enterpriseIDList: [], // 企业
@@ -128,7 +151,16 @@ export default {
         enterpriseID: '', // 企业
         city: '', // 区县
         province: '', // 城市
-        direction: '' // 方向
+        direction: '', // 方向
+        // 选项表单数据对象部分
+        options: [
+          // {code: '编号ABCD', title: '当前项目文字答案',
+          //   img: '当前项目图片答案', isRight: boolean表明当前项目是否是答案},
+          { code: 'A', title: '', img: '', isRight: false },
+          { code: 'B', title: '', img: '', isRight: false },
+          { code: 'C', title: '', img: '', isRight: false },
+          { code: 'D', title: '', img: '', isRight: false }
+        ]
       }
     }
   },
@@ -136,6 +168,17 @@ export default {
     this.getEnterpriseIDList() // 获得企业
     this.getSubjectIDList() // 学科
     this.getCatalogIDList() // 二级目录
+  },
+  watch: {
+    singleSelect(newV, oldV) {
+      // 设置当前单选按钮中情况,即isRight的值发送变化
+      // 1. 先让全部项目处于false不选中状态
+      for (var i = 0; i < 4; i++) {
+        this.addForm.options[i].isRight = false
+      }
+      // 2. 当前选中项目的isRight为ture
+      this.addForm.options[newV].isRight = true
+    }
   },
   methods: {
     provinces, // 获得城市的方法(简易成员赋值)
