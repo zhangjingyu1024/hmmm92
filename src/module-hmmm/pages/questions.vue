@@ -4,8 +4,8 @@
       <el-card>
         <el-row>
           <el-col>
-            <el-button type="primary" size="mini" @click="$router.push('/questions/new')">新增试题</el-button>
-            <el-button type="danger" size="mini">批量导入</el-button>
+            <el-button type="primary" size="mini" @click="$router.push('/questions/new')">{{ $t('question.newadd') }}</el-button>
+            <el-button type="danger" size="mini">{{ $t('question.manyadd') }}</el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -134,6 +134,16 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- 试题分页 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="searchForm.page"
+          :page-sizes="[3, 5, 10, 20]"
+          :page-size="searchForm.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="tot"
+        ></el-pagination>
       </el-card>
     </div>
   </div>
@@ -167,9 +177,12 @@ export default {
       subjectIDList: [],
       difficultyList, // 简易成员赋值(difficultyList:difficultyList)
       questionTypeList, // 简易成员赋值
+      tot: 0, // 数据总条数
 
       // 定义搜索数据对象
       searchForm: {
+        page: 1, // 默认获取第1页数据
+        pagesize: 3, // 默认每页获得3条数据
         subjectID: '', // 科学
         difficulty: '', // 难度
         questionType: '', // 试题类型
@@ -209,6 +222,18 @@ export default {
     this.getTagsList()
   },
   methods: {
+    // 每页条数变化回调处理
+    handleSizeChange(val) {
+      // val：变化后的每页条数
+      // 表单成员接收
+      this.searchForm.pagesize = val
+    },
+    // 当前页码变化的回调处理
+    handleCurrentChange(val) {
+      // val: 变化后的当前页码
+      // 表单成员接收
+      this.searchForm.page = val
+    },
     // 删除试题
     // question : 被删除试题的整条记录对象
     del(question) {
@@ -246,6 +271,8 @@ export default {
       var result = await list(this.searchForm)
       // 把获得好的题库列表信息富裕给questionList
       this.questionList = result.data.items
+      // 获得数据总条数并赋予给searchForm.tot成员
+      this.tot = result.data.counts
     },
     // 获得 城市 信息
     // 这个pname形参就代表被选中的省份信息
@@ -292,5 +319,8 @@ export default {
 
 .el-table {
   margin-top: 20px;
+}
+.el-pagination{
+  margin-top:15px;
 }
 </style>
