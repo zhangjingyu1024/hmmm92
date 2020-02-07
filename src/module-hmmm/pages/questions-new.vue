@@ -83,7 +83,8 @@
             <el-input type="text" v-model="addForm.tags"></el-input>
           </el-form-item>
 
-          <el-form-item label="选项：">
+          <el-form-item label="选项：" v-if="anyShow">
+            <template v-if="radioShow">
             <el-radio v-model="singleSelect" :label="0">
               A:
               <el-input type="text" v-model="addForm.options[0]['title']"></el-input>
@@ -103,6 +104,29 @@
               D:
               <el-input type="text" v-model="addForm.options[3]['title']"></el-input>
             </el-radio>
+            </template>
+
+            <template v-else>
+                          <el-checkbox v-model="addForm.options[0].isRight">
+              A:
+              <el-input type="text" v-model="addForm.options[0]['title']"></el-input>
+            </el-checkbox>
+            <br />
+            <el-checkbox v-model="addForm.options[1].isRight" >
+              B:
+              <el-input type="text" v-model="addForm.options[1]['title']"></el-input>
+            </el-checkbox>
+            <br />
+            <el-checkbox v-model="addForm.options[2].isRight" >
+              C:
+              <el-input type="text" v-model="addForm.options[2]['title']"></el-input>
+            </el-checkbox>
+            <br />
+            <el-checkbox v-model="addForm.options[3].isRight">
+              D:
+              <el-input type="text" v-model="addForm.options[3]['title']"></el-input>
+            </el-checkbox>
+            </template>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="addQuestion()">提交</el-button>
@@ -130,6 +154,8 @@ export default {
   name: 'QuestionsNew',
   data() {
     return {
+      radioShow: true, // 默认显示单选项目
+      anyShow: true, // 单选或多选默认显示一个
       // 感知被被选中的项目的值，是中间成员，需要通过watch转变为isRight
       singleSelect: '',
       difficultyList, // 难度 简易成员赋值
@@ -172,6 +198,21 @@ export default {
     this.getCatalogIDList() // 二级目录
   },
   watch: {
+    // 监听题型，进而切换显示 选项表单域
+    'addForm.questionType': function(newV) {
+      if (newV === '1') {
+        // 单选
+        this.anyShow = true
+        this.radioShow = true
+      } else if (newV === '2') {
+        // 多选
+        this.anyShow = true
+        this.radioShow = false
+      } else {
+        // 简单
+        this.anyShow = false
+      }
+    },
     singleSelect(newV, oldV) {
       // 设置当前单选按钮中情况,即isRight的值发送变化
       // 1. 先让全部项目处于false不选中状态
