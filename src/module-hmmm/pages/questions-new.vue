@@ -82,9 +82,7 @@
           <el-form-item label="标签：">
             <el-input type="text" v-model="addForm.tags"></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary">提交</el-button>
-          </el-form-item>
+
           <el-form-item label="选项：">
             <el-radio v-model="singleSelect" :label="0">
               A:
@@ -106,6 +104,9 @@
               <el-input type="text" v-model="addForm.options[3]['title']"></el-input>
             </el-radio>
           </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addQuestion()">提交</el-button>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -113,6 +114,7 @@
 </template>
 
 <script>
+import { add } from '@/api/hmmm/questions' // 试题
 import {
   difficulty as difficultyList,
   questionType as questionTypeList
@@ -183,6 +185,18 @@ export default {
   methods: {
     provinces, // 获得城市的方法(简易成员赋值)
     citys, // 获得地区的方法(简易成员赋值)
+    // 添加试题
+    async addQuestion() {
+      // 调用api
+      // await除了获得具体返回结果，还有一个作用
+      // 等待添加完成再向后执行，可以保证添加的数据会在列表中展示
+      await add(this.addForm)
+      // console.log(result)  // 有返回新试题的id信息
+      // 提示成功信息
+      this.$message.success('添加试题成功！')
+      // 页面跳转到列表去
+      this.$router.push('/questions/list')
+    },
     // 获得 企业 列表信息
     async getEnterpriseIDList() {
       var result = await companysList()
